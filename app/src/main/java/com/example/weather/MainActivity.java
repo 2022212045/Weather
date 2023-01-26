@@ -1,5 +1,6 @@
 package com.example.weather;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Message;
 import android.widget.Button;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void sendGetNetRequest() {
         new Thread(
                 () -> {
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                         Message message = new Message();//新建一个Message
                         message.obj = responseData;//将数据赋值给message的obj属性
                         mHandler.sendMessage(message);
-                        mtv.setText(responseData);
+                        mtv.setText("responseData");
 //                        Log.d("RQ", "sendGetNetRequest: "+responseData);
                     } catch (Exception e) {
                         e.printStackTrace();
