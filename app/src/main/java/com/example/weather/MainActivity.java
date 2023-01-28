@@ -22,6 +22,9 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity {
     private Button mbutton;
     private TextView mtv;
+    private TextView mtv2;
+    private Handler mhandler;
+
     @SuppressLint("HandlerLeak")
     public Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -33,11 +36,6 @@ public class MainActivity extends AppCompatActivity {
             jsonDecodeTest(responseData);
         }
     };
-    private TextView mtv2;
-    private Handler mhandler;
-
-    public MainActivity() {
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
     private void jsonDecodeTest(String jsonData) {
         //原始json字段
 //        String jsonData0 = "{\"redrock\":{\"woman_num\": 5,\"man_num\": 0},\"man\":[{\"name\":\"王鸿杨\",\"status\":\"摸鱼\"},{\"name\":\"艾卫熹\",\"status\":\"刷leetcode\"},{\"name\":\"郭晓强\",\"status\":\"手撸compose\"},{\"name\":\"李戬\",\"status\":\"写自定义view\"},{\"name\":\"郭涵宇\",\"status\":\"写博客\"},]}";
-        String a = jsonData.substring(jsonData.indexOf("high"), jsonData.indexOf("div"));
-        String b = jsonData.substring(jsonData.indexOf("low"), jsonData.indexOf("div"));
+        String a = jsonData.substring(jsonData.indexOf("high"), jsonData.indexOf("low"));
+        String b = jsonData.substring(jsonData.indexOf("low"), jsonData.indexOf("day-item nighticon"));
         String str1 = a.replaceAll("\\D+", "");//提取数字
         String str2 = b.replaceAll("\\D+", "");//提取数字
         mtv.setText(str1 + "-" + str2);
