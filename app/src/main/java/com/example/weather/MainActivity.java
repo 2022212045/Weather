@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mbutton;
     private TextView mtv;
     private Handler mHandler;
+    private TextView mtv2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
                         connection.connect();//正式连接
                         InputStream in = connection.getInputStream();//从接口处获取
                         String responseData = StreamToString(in);//这里就是服务器返回的数据
+                        mtv2.setText("String" + responseData + "String");
                         //下面三行代码的意思就是将数据保存在message里也就是消息里，然后交给接线员
                         Message message = new Message();//新建一个Message
                         message.obj = responseData;//将数据赋值给message的obj属性
@@ -120,14 +122,18 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         mtv = findViewById(R.id.textView);
         mbutton = findViewById(R.id.button);
+        mtv2 = findViewById(R.id.textView2);
     }
 
     @SuppressLint("SetTextI18n")
     private void jsonDecodeTest(String jsonData) {
         //原始json字段
 //        String jsonData0 = "{\"redrock\":{\"woman_num\": 5,\"man_num\": 0},\"man\":[{\"name\":\"王鸿杨\",\"status\":\"摸鱼\"},{\"name\":\"艾卫熹\",\"status\":\"刷leetcode\"},{\"name\":\"郭晓强\",\"status\":\"手撸compose\"},{\"name\":\"李戬\",\"status\":\"写自定义view\"},{\"name\":\"郭涵宇\",\"status\":\"写博客\"},]}";
-        String str = jsonData.replaceAll("\\D+", "");//提取数字
-        mtv.setText("String" + str + "String");
+        String a = jsonData.substring(jsonData.indexOf("high"), jsonData.indexOf("div"));
+        String b = jsonData.substring(jsonData.indexOf("low"), jsonData.indexOf("div"));
+        String str1 = a.replaceAll("\\D+", "");//提取数字
+        String str2 = b.replaceAll("\\D+", "");//提取数字
+        mtv.setText(str1 + "-" + str2);
 //            int time=0;
 //            StringBuilder sb = new StringBuilder();
 //            while (jsonData.readLine() != null) {
