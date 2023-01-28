@@ -3,6 +3,7 @@ package com.example.weather;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Button;
@@ -21,48 +22,31 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity {
     private Button mbutton;
     private TextView mtv;
-    private Handler mHandler;
+    @SuppressLint("HandlerLeak")
+    public Handler handler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            //这个Message msg 就是从另一个线程传递过来的数据
+            //在这里进行你要对msg的处理
+            String responseData = msg.obj.toString();
+            jsonDecodeTest(responseData);
+        }
+    };
     private TextView mtv2;
+    private Handler mhandler;
+
+    public MainActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-        mHandler = new MyHandler();//准备接线员
+        mhandler = new Handler();//准备接线员
         mbutton.setOnClickListener(view -> sendGetNetRequest());
 
-    }
-
-    @SuppressLint("SetTextI18n")
-    private void sendGetNetRequest() {
-        new Thread(
-                () -> {
-                    try {
-                        URL url = new URL("https://weather.cma.cn//web/weather/57516.html");
-                        HttpURLConnection connection = (HttpURLConnection)
-                                url.openConnection();
-                        connection.setRequestMethod("GET");//设置请求方式为GET
-                        connection.setConnectTimeout(8000);//设置最大连接时间，单位为ms
-                        connection.setReadTimeout(8000);//设置最大的读取时间，单位为ms
-                        connection.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.9");
-                        connection.setRequestProperty("Accept-Encoding", "gzip,deflate");
-                        connection.connect();//正式连接
-                        InputStream in = connection.getInputStream();//从接口处获取
-                        String responseData = StreamToString(in);//这里就是服务器返回的数据
-                        mtv2.setText("String" + responseData + "String");
-                        //下面三行代码的意思就是将数据保存在message里也就是消息里，然后交给接线员
-                        Message message = new Message();//新建一个Message
-                        message.obj = responseData;//将数据赋值给message的obj属性
-                        mHandler.sendMessage(message);
-//                        a.setText("String"+responseData+"String");
-//                        mtv.setText("String"+responseData+"String");
-                        Log.d("RQ", "sendGetNetRequest: " + responseData);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-        ).start();
     }
     private String StreamToString(InputStream in) {
         StringBuilder sb = new StringBuilder();//新建一个StringBuilder，用于一点一点
@@ -153,15 +137,34 @@ public class MainActivity extends AppCompatActivity {
 //            }
     }
 
-    @SuppressLint("HandlerLeak")
-    private class MyHandler extends Handler {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            //这个Message msg 就是从另一个线程传递过来的数据
-            //在这里进行你要对msg的处理
-            String responseData = msg.obj.toString();
-            jsonDecodeTest(responseData);
-        }
+    @SuppressLint("SetTextI18n")
+    private void sendGetNetRequest() {
+        new Thread(
+                () -> {
+                    try {
+                        URL url = new URL("https://weather.cma.cn//web/weather/57516.html");
+                        HttpURLConnection connection = (HttpURLConnection)
+                                url.openConnection();
+                        connection.setRequestMethod("GET");//设置请求方式为GET
+                        connection.setConnectTimeout(8000);//设置最大连接时间，单位为ms
+                        connection.setReadTimeout(8000);//设置最大的读取时间，单位为ms
+                        connection.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.9");
+                        connection.setRequestProperty("Accept-Encoding", "gzip,deflate");
+                        connection.connect();//正式连接
+                        InputStream in = connection.getInputStream();//从接口处获取
+                        String responseData = StreamToString(in);//这里就是服务器返回的数据
+//                        mtv2.setText("String" + responseData + "String");
+                        //下面三行代码的意思就是将数据保存在message里也就是消息里，然后交给接线员
+                        Message message = new Message();//新建一个Message
+                        message.obj = responseData;//将数据赋值给message的obj属性
+                        mhandler.sendMessage(message);
+//                        a.setText("String"+responseData+"String");
+//                        mtv.setText("String"+responseData+"String");
+                        Log.d("RQ", "sendGetNetRequest: " + responseData);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+        ).start();
     }
 }
