@@ -2,4 +2,5 @@
     <string name="app_name">Weather</string>
     <string name="responsedata">responseData</string>
     <string name="btn">一键查看重庆温度</string>
+    <string name="今日重庆温度">一键查询今日重庆温度</string>
 </resources>
