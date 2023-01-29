@@ -23,24 +23,14 @@
         android:layout_height="93dp"
         android:text=""
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="50dp"
+        android:textSize="40dp"
         app:autoSizeMaxTextSize="@android:dimen/app_icon_size"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.693"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.602" />
+        app:layout_constraintVertical_bias="0.6" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="283dp"
-        android:layout_height="201dp"
-        android:text=""
-        app:layout_constraintBottom_toTopOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.588" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
